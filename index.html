@@ -67,8 +67,18 @@
     <!-- cards -->
     <div
       id="cards-container"
-      class="max-w-7xl mx-auto grid grid-cols-4 gap-6"
+      class="max-w-7xl mx-auto mt-6 grid grid-cols-4 gap-6"
     ></div>
+
+    <!-- when content are not available then show this -->
+    <div id="error-msg" class="hidden">
+      <div class="flex items-center justify-center flex-col h-96">
+        <img src="assets/Icon.png" alt="" srcset="" />
+        <h2 class="font-bold text-3xl pt-3 text-gray-700">
+          Oops!! Sorry, There is no content here
+        </h2>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>
