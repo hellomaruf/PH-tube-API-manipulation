@@ -1,4 +1,8 @@
 const buttonContainer = document.getElementById("button-container");
+let errorMessage = document.getElementById("error-msg");
+let cardContainer = document.getElementById("cards-container");
+let sortBtn = document.getElementById("sort-btn");
+
 const fetchCategory = async () => {
   let res = await fetch(
     "https://openapi.programming-hero.com/api/videos/categories"
@@ -9,18 +13,24 @@ const fetchCategory = async () => {
     // let elementId = element.category_id;
     // console.log(elementId);
     let button = document.createElement("button");
-    button.className = "btn bg-red-500 text-white hover:bg-red-400 mx-1";
+    button.className = "btn category-btn bg-red-500 text-white  mx-1";
     button.innerText = element.category;
     buttonContainer.appendChild(button);
+
+    // button.classList.remove("bg-red-500");
     button.addEventListener("click", () =>
       fetchDataByCategory(element.category_id)
     );
   });
 };
 
-let errorMessage = document.getElementById("error-msg");
-let cardContainer = document.getElementById("cards-container");
-const fetchDataByCategory = async (elementId = 1000) => {
+let selectedCategory = 1000;
+let sortByView = false;
+sortBtn.addEventListener("click", function () {
+  sortByView = true;
+  fetchDataByCategory(selectedCategory, sortByView);
+});
+const fetchDataByCategory = async (elementId = 1000, sortByView) => {
   console.log(elementId);
 
   let res = await fetch(
@@ -29,6 +39,18 @@ const fetchDataByCategory = async (elementId = 1000) => {
   let data = await res.json();
   let allData = data.data;
 
+  // sorted all card by view*************
+  if (sortByView) {
+    allData.sort((a, b) => {
+      let totalViewFristStr = a.others.views;
+      let totalViewSecondStr = b.others.views;
+      let totalViewFristNum =
+        parseFloat(totalViewFristStr.replace("K", "")) || 0;
+      let totalViewSecondNum =
+        parseFloat(totalViewSecondStr.replace("K", "")) || 0;
+      return totalViewSecondNum - totalViewFristNum;
+    });
+  }
   // whan card are not available then show this error msg*************
   console.log(allData.length);
   if (allData.length === 0) {
